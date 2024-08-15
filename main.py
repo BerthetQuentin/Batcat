@@ -1,3 +1,4 @@
+import asyncio
 import os
 from dotenv import load_dotenv
 import discord
@@ -25,7 +26,23 @@ async def hello(ctx):
 # Commande slash
 @bot.tree.command(name="test", description="a test")
 async def test(interaction: discord.Interaction):
-    await interaction.response.send_message("This is a test!")
+        await interaction.response.send_message("This is a test!")
+
+spam = True
+# Commande traditionnelle
+@bot.command()
+async def spam(ctx, member: discord.Member):
+    global spam
+    spam = True
+    while spam:
+        await ctx.send(member.mention)
+        await asyncio.sleep(0.1)
+
+@bot.command()
+async def stop(ctx):
+    global spam
+    spam = False
+    await ctx.send('Stopped!')
 
 token = os.getenv('BOT_TOKEN')
 bot.run(token)
