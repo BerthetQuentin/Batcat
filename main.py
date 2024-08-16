@@ -29,6 +29,7 @@ async def test(interaction: discord.Interaction):
     await interaction.response.send_message("This is a test!")
 
 spam = True
+created_channels = []  # Liste pour garder une trace des salons créés
 
 # Fonction pour créer une catégorie ou obtenir une catégorie existante
 async def create_or_get_category(guild, category_name):
@@ -42,7 +43,9 @@ async def create_channel(ctx, channel_name, category):
     guild = ctx.guild
     existing_channel = discord.utils.get(guild.channels, name=channel_name)
     if not existing_channel:
-        return await guild.create_text_channel(channel_name, category=category)
+        channel = await guild.create_text_channel(channel_name, category=category)
+        created_channels.append(channel)  # Ajouter le salon à la liste des salons créés
+        return channel
     return existing_channel
 
 # Commande traditionnelle pour spammer un utilisateur
@@ -60,7 +63,7 @@ async def spam(ctx, member: discord.Member):
         if count >= 5:  # Si 5 messages sont envoyés, créer un nouveau salon
             count = 0
             channel_count += 1
-            channel_name = f'spam-{member}-{channel_count}'
+            channel_name = f'spam-channel-{channel_count}'
             channel = await create_channel(ctx, channel_name, category)
             ctx = await bot.get_context(await channel.send(f'Nouveau salon créé : {channel_name}'))
 
@@ -73,6 +76,15 @@ async def stop(ctx):
     global spam
     spam = False
     await ctx.send('Stopped!')
+
+# Commande pour supprimer les salons créés par le bot
+@bot.command()
+async def deleteSpam(ctx):
+    global created_channels
+    for channel in created_channels:
+        await channel.delete()  # Supprimer chaque salon dans la liste
+    created_channels = []  # Réinitialiser la liste après suppression
+    await ctx.send('All spam channels have been deleted!')
 
 token = os.getenv('BOT_TOKEN')
 bot.run(token)
