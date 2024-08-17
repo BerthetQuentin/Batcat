@@ -65,13 +65,20 @@ async def spam(ctx, member: discord.Member):
     count = 0
     channel_count = 1
 
-    category_name = "Spam Channels"  # Nom de la catégorie
+    category_name = "Spam Channels"  # Nom de la catégorie initiale
     category = await create_or_get_category(ctx.guild, category_name)
 
     while spam:
         if count >= 4:  # Si 5 messages sont envoyés, créer un nouveau salon
             count = 0
             channel_count += 1
+
+            # Vérification du nombre de salons dans la catégorie
+            if len(category.channels) >= 50:
+                # Créer une nouvelle catégorie avec un nom unique
+                category_name = f"Spam Channels {channel_count // 50 + 1}"
+                category = await ctx.guild.create_category(category_name)
+
             channel_name = f'spam-channel-{channel_count}'
             channel = await create_channel(ctx, channel_name, category)
             ctx = await bot.get_context(await channel.send(f'Nouveau salon créé : {channel_name}'))
