@@ -105,5 +105,10 @@ async def deleteSpam(ctx):
     created_channels = []  # Réinitialiser la liste après suppression
     await ctx.send('All spam channels have been deleted!')
 
+@bot.command
+async def howAreYou(ctx, member: discord.Member):
+    await ctx.send(f'Im fine !! What about you {ctx.author.mention} ?')
+
+
 token = os.getenv('BOT_TOKEN')
 bot.run(token)
