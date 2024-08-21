@@ -35,7 +35,12 @@ class Spam(commands.Cog):
     # Command to spam a member with messages in newly created channels
     @commands.command()
     @commands.has_role("Admin")
-    async def spam(self, ctx, member: discord.Member):
+    async def spam(self, ctx, member: discord.Member = None):
+        # Check if user has been selected
+        if member is None:
+            await ctx.send('Please specify a member to spam.')
+            return
+
         global spam
         spam = True
         count = 0
@@ -43,6 +48,9 @@ class Spam(commands.Cog):
 
         category_name = "Spam Channels"  # Initial category name
         category = await self.create_or_get_category(ctx.guild, category_name)
+
+        await ctx.send("Spam in progress...")
+        await ctx.send("Use **+stop** for stopping the spam")
 
         while spam:
             if count >= 4:  # Create a new channel after 4 messages
@@ -72,12 +80,18 @@ class Spam(commands.Cog):
         global spam
         spam = False
         await ctx.send('Stopped!')
+        await ctx.send("Use **+delete** for deleting the spam messages")
 
     # Command to delete all created spam channels and their categories
     @commands.command()
     @commands.has_role("Admin")
     async def delete(self, ctx):
-        global created_channels
+        global created_channels, spam
+
+        if spam:
+            await ctx.send('Use **+stop** for stopping the spam before deleting the channels')
+            return
+        
         await ctx.send('Deleting spam channels in progress...')
 
         # Track categories to delete
