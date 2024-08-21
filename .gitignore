@@ -13,3 +13,5 @@ __pycache__/
 # Ignore virtual environment directories
 myenv/
 /cogs/__pycache__
+cogs/__pycache__/moderation.cpython-312.pyc
+cogs/__pycache__/reactions.cpython-312.pyc
