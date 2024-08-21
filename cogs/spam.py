@@ -86,7 +86,12 @@ class Spam(commands.Cog):
     @commands.command()
     @commands.has_role("Admin")
     async def delete(self, ctx):
-        global created_channels
+        global created_channels, spam
+
+        if spam:
+            await ctx.send('Use **+stop** for stopping the spam before deleting the channels')
+            return
+        
         await ctx.send('Deleting spam channels in progress...')
 
         # Track categories to delete
