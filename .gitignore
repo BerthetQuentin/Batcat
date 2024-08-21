@@ -1,3 +1,14 @@
-.idea
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore IDE configuration directories
+.idea/
+
+# Ignore environment files
 .env
-myenv
+
+# Ignore virtual environment directories
+myenv/
