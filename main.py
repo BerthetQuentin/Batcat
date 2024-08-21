@@ -24,6 +24,7 @@ async def on_ready():
     print(f'Logged in as {bot.user.name}')
     await bot.load_extension('cogs.moderation')
     await bot.load_extension('cogs.reactions')
+    await bot.load_extension('cogs.spam')
 
 
 bot.run(TOKEN)
