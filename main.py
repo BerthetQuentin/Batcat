@@ -21,10 +21,10 @@ bot = commands.Bot(command_prefix='+', intents=intents)
 # Load the cogs
 @bot.event
 async def on_ready():
-    print(f'Logged in as {bot.user.name}')
     await bot.load_extension('cogs.moderation')
     await bot.load_extension('cogs.reactions')
     await bot.load_extension('cogs.spam')
+    print(f'Logged in as {bot.user.name}')
 
 
 bot.run(TOKEN)
