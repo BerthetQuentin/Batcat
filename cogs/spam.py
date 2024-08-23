@@ -1,7 +1,6 @@
 from discord.ext import commands
 import discord
 import asyncio
-from discord import Member
 
 spam = True
 created_channels = []
