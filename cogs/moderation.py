@@ -9,6 +9,7 @@ from utils.role_manager import assign_role
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        logging = self.bot.logging('logging')
 
     # Command to kick
     @commands.command(name='kick')
@@ -26,10 +27,10 @@ class Moderation(commands.Cog):
         await ctx.send(f'{member.mention} has been banned for: {reason}')
         print(f'{member.mention} has been banned for: {reason}')
 
+    # Command to unban
     @commands.command(name='unban')
     @has_permissions(ban_members=True)
     async def unban(self, ctx, *, member):
-        # Vérifie si l'argument est un ID numérique
         if member.isdigit():
             member_id = int(member)
         else:
@@ -37,14 +38,13 @@ class Moderation(commands.Cog):
 
         async for ban_entry in ctx.guild.bans():
             user = ban_entry.user
-            # Vérifie si c'est le même utilisateur par ID ou par nom#discriminator
             if user.id == member_id or f"{user.name}#{user.discriminator}" == member:
                 await ctx.guild.unban(user)
                 await ctx.send(f'{user.mention} has been unbanned from the server')
                 print(f'{user.mention} has been unbanned from the server')
                 return
 
-        # Si aucun utilisateur banni correspondant n'est trouvé
+        # if no user's found
         await ctx.send(f'User {member} not found')
         print(f'{member} not found')
 
@@ -61,7 +61,7 @@ class Moderation(commands.Cog):
                                               speak=False,
                                               send_messages=False,
                                               read_message_history=True,
-                                              read_messages=False)
+                                              read_messages=True)
 
         await member.add_roles(role, reason=reason)
         await ctx.send(f'{member.mention} has been muted for {minutes} minutes for: {reason}')
@@ -73,6 +73,7 @@ class Moderation(commands.Cog):
             await ctx.send(f'{member.mention} has served his sentence')
             print(f'{member.name} has been unmuted')
 
+    # Command to unmute
     @commands.command(name='unmute')
     @has_permissions(manage_roles=True)
     async def unmute(self, ctx, member: Member):
@@ -85,6 +86,7 @@ class Moderation(commands.Cog):
             await ctx.send(f'{member.name} is not muted')
             print(f'{member.name} has been unmuted')
 
+    # When new member join
     @commands.Cog.listener()
     async def on_member_join(self, member):
         role_name = "membre"
@@ -94,6 +96,7 @@ class Moderation(commands.Cog):
         else:
             print(f"The role '{role_name}' was not found for {member.name}.")
 
+    # add roles
     @commands.command(name='add')
     async def add(self, ctx, member: Member, role_name=None):
         success = await assign_role(member, role_name)
