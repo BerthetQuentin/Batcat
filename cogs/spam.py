@@ -33,8 +33,14 @@ class Spam(commands.Cog):
 
     # Command to spam a member with messages in newly created channels
     @commands.command()
-    @commands.has_role("spam")
     async def spam(self, ctx, member: discord.Member = None):
+        # Check if role spam
+        role = discord.utils.get(ctx.guild.roles, name="spam")
+        if role not in ctx.author.roles:
+            await ctx.send("You dont have permission to spam.")
+            print(f'{ctx.author} tried to spam {member}')
+            return
+
         # Check if user has been selected
         if member is None:
             await ctx.send('Please specify a member to spam.')
@@ -49,6 +55,7 @@ class Spam(commands.Cog):
         category = await self.create_or_get_category(ctx.guild, category_name)
 
         await ctx.send("Spam in progress...")
+        print(f'{ctx.author} spam {member}')
         await ctx.send("Use **+stop** for stopping the spam")
 
         while spam:
@@ -65,6 +72,7 @@ class Spam(commands.Cog):
                 channel_name = f'spam-channel-{channel_count}'
                 channel = await self.create_channel(ctx, channel_name, category)
                 await channel.send(f'New channel created: {channel_name}')
+                print(f'New channel created: {channel_name}')
 
             # Send spam messages in all created channels
             for channel in created_channels:
@@ -74,17 +82,30 @@ class Spam(commands.Cog):
 
     # Command to stop spamming
     @commands.command()
-    @commands.has_role("Admin")
     async def stop(self, ctx):
+        # Check if role spam
+        role = discord.utils.get(ctx.guild.roles, name="spam")
+        if role not in ctx.author.roles:
+            await ctx.send("You dont have permission to stop the spam.")
+            print(f'{ctx.author} tried to stop thespam')
+            return
+
         global spam
         spam = False
         await ctx.send('Stopped!')
+        print(f'{ctx.author} stopped spam')
         await ctx.send("Use **+delete** for deleting the spam messages")
 
     # Command to delete all created spam channels and their categories
     @commands.command()
-    @commands.has_role("Admin")
     async def delete(self, ctx):
+        # Check if role spam
+        role = discord.utils.get(ctx.guild.roles, name="spam")
+        if role not in ctx.author.roles:
+            await ctx.send("You dont have permission to delete the spam.")
+            print(f'{ctx.author} tried to delete the spam')
+            return
+
         global created_channels, spam
 
         if spam:
@@ -110,6 +131,7 @@ class Spam(commands.Cog):
             await category.delete()
 
         await ctx.send('All spam channels and categories have been deleted!')
+        print(f'{ctx.author} deleted spam channels')
 
 
 async def setup(bot):
