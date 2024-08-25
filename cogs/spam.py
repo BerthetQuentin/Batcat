@@ -33,7 +33,7 @@ class Spam(commands.Cog):
 
     # Command to spam a member with messages in newly created channels
     @commands.command()
-    @commands.has_role("Admin")
+    @commands.has_role("spam")
     async def spam(self, ctx, member: discord.Member = None):
         # Check if user has been selected
         if member is None:
