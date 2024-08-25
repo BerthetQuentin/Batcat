@@ -37,7 +37,7 @@ __________    _________________________     ________________
     await bot.load_extension('cogs.moderation')
     await bot.load_extension('cogs.reactions')
     await bot.load_extension('cogs.spam')
-    print(f'Logged in as {bot.user.name}')
+    print("\033[97m" + f'Logged in as {bot.user.name}')
 
 
 bot.run(TOKEN)

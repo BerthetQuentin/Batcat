@@ -18,10 +18,12 @@ class Reactions(commands.Cog):
         # Respond to "hello" in the message
         if 'hello' in message.content.lower():
             await message.channel.send(f'Hello {message.author.mention}!')
+            print(f'{message.author} say Hello')
 
         # Respond to "bye" in the message
         if 'bye' in message.content.lower():
             await message.channel.send(f'Bye {message.author.mention}!')
+            print(f'{message.author} say Bye')
 
 async def setup(bot):
     await bot.add_cog(Reactions(bot))

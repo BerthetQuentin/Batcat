@@ -16,6 +16,7 @@ class Moderation(commands.Cog):
     async def kick(self, ctx, member: Member, *, reason=None):
         await member.kick(reason=reason)
         await ctx.send(f'{member.mention} has been kicked for: {reason}')
+        print(f'{member.mention} has been kicked for: {reason}')
 
     # Command to ban
     @commands.command(name='ban')
@@ -23,6 +24,7 @@ class Moderation(commands.Cog):
     async def ban(self, ctx, member: Member, *, reason=None):
         await member.ban(reason=reason)
         await ctx.send(f'{member.mention} has been banned for: {reason}')
+        print(f'{member.mention} has been banned for: {reason}')
 
     @commands.command(name='unban')
     @has_permissions(ban_members=True)
@@ -78,8 +80,10 @@ class Moderation(commands.Cog):
         if role in member.roles:
             await member.remove_roles(role)
             await ctx.send(f'{member.name} has been unmuted by {ctx.author}')
+            print(f'{member.name} has been unmuted by {ctx.author}')
         else:
             await ctx.send(f'{member.name} is not muted')
+            print(f'{member.name} has been unmuted')
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
