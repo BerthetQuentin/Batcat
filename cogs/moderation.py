@@ -90,9 +90,19 @@ class Moderation(commands.Cog):
         role_name = "membre"
         success = await assign_role(member, role_name)
         if success:
-            print(f"Le rôle '{role_name}' a été attribué à {member.name}.")
+            print(f"The role '{role_name}' has been assigned to {member.name}.")
         else:
-            print(f"Le rôle '{role_name}' n'a pas été trouvé pour {member.name}.")
+            print(f"The role '{role_name}' was not found for {member.name}.")
+
+    @commands.command(name='add')
+    async def add(self, ctx, member: Member, role_name=None):
+        success = await assign_role(member, role_name)
+        if success:
+            await ctx.send(f'{member.mention} has been added to {role_name}')
+            print(f"The role '{role_name}' has been assigned to {member.name}.")
+        else:
+            await ctx.send(f'{member.mention} was not added to {role_name}')
+            print(f"The role '{role_name}' was not added for {member.name}.")
 
 
 async def setup(bot):
