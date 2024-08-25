@@ -9,7 +9,6 @@ from utils.role_manager import assign_role
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        logging = self.bot.logging('logging')
 
     # Command to kick
     @commands.command(name='kick')
@@ -99,10 +98,12 @@ class Moderation(commands.Cog):
     # add roles
     @commands.command(name='add')
     async def add(self, ctx, member: Member, role_name=None):
+        logging = self.bot.logging('logging')
         success = await assign_role(member, role_name)
         if success:
             await ctx.send(f'{member.mention} has been added to {role_name}')
             print(f"The role '{role_name}' has been assigned to {member.name}.")
+            await logging.write_log(f"The role '{role_name}' has been assigned to {member.name}.")
         else:
             await ctx.send(f'{member.mention} was not added to {role_name}')
             print(f"The role '{role_name}' was not added for {member.name}.")
