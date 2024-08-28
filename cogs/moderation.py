@@ -98,12 +98,14 @@ class Moderation(commands.Cog):
     # add roles
     @commands.command(name='add')
     async def add(self, ctx, member: Member, role_name=None):
-        logging = self.bot.logging('logging')
+        logging_cog = self.bot.get_cog('Logging')
         success = await assign_role(member, role_name)
+
         if success:
             await ctx.send(f'{member.mention} has been added to {role_name}')
             print(f"The role '{role_name}' has been assigned to {member.name}.")
-            await logging.write_log(f"The role '{role_name}' has been assigned to {member.name}.")
+            if logging_cog:
+                await logging_cog.write_log(f"The role '{role_name}' has been assigned to {member.name}.")
         else:
             await ctx.send(f'{member.mention} was not added to {role_name}')
             print(f"The role '{role_name}' was not added for {member.name}.")
