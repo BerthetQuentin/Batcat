@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from discord import Member
 from discord.ext.commands import has_permissions
-from utils.role_manager import assign_role
+from utils.role_manager import assign_role, remove_role
 
 
 class Moderation(commands.Cog):
@@ -109,6 +109,23 @@ class Moderation(commands.Cog):
         else:
             await ctx.send(f'{member.mention} was not added to {role_name}')
             print(f"The role '{role_name}' was not added for {member.name}.")
+
+    # Remove roles
+    @commands.command(name='remove')
+    async def remove(self, ctx, member: Member, role_name=None):
+        logging_cog = self.bot.get_cog('Logging')
+        success = await remove_role(member, role_name)
+
+        if success:
+            await ctx.send(f'{member.mention} has been removed from {role_name}')
+            print(f"The role '{role_name}' has been removed from {member.name}.")
+            if logging_cog:
+                await logging_cog.write_log(f"The role '{role_name}' has been removed from {member.name}.")
+        else:
+            await ctx.send(f'{member.mention} was not removed from {role_name}')
+            print(f"The role '{role_name}' was not removed for {member.name}.")
+            if logging_cog:
+                await logging_cog.write_log(f"The role '{role_name}' was not removed for {member.name}.")
 
 
 async def setup(bot):
