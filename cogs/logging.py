@@ -24,7 +24,7 @@ class Logging(commands.Cog):
     async def on_ready(self):
         log_channel = self.get_log_channel()
         if log_channel:
-            await log_channel.send("Bot is ready!")
+            await log_channel.send("Bot is ready! <:emoji_name:1279021930200170519>")
         else:
             print(f"Channel '{self.log_channel_name}' not found.")
 
