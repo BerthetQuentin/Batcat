@@ -2,6 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+import asyncio
 
 # Load the .env file
 load_dotenv()
@@ -17,12 +18,16 @@ intents.members = True
 # Create the bot with a command prefix
 bot = commands.Bot(command_prefix='+', intents=intents)
 
+# Define an asynchronous setup function
+async def setup_extensions():
+    await bot.load_extension('cogs.moderation')
+    await bot.load_extension('cogs.reactions')
+    await bot.load_extension('cogs.spam')
+    await bot.load_extension('cogs.logging')
 
-# Load the cogs
 @bot.event
 async def on_ready():
     print("\033[91m" + r"""
-
 
 __________    _________________________     ________________
 \______   \  /  _  \__    ___/\_   ___ \   /  _  \__    ___/
@@ -31,14 +36,17 @@ __________    _________________________     ________________
  |______  /\____|__  /____|    \______  /\____|__  /____|   
         \/         \/                 \/         \/         
 
-
     """)
 
-    await bot.load_extension('cogs.moderation')
-    await bot.load_extension('cogs.reactions')
-    await bot.load_extension('cogs.spam')
-    await bot.load_extension('cogs.logging')
     print("\033[97m" + f'Logged in as {bot.user.name}')
 
+async def main():
+    async with bot:
+        await setup_extensions()
+        await bot.start(TOKEN)
 
-bot.run(TOKEN)
+try:
+    asyncio.run(main())
+except KeyboardInterrupt:
+    print("\r\nBot is shutting down...")
+
