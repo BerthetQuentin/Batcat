@@ -24,6 +24,7 @@ async def setup_extensions():
     await bot.load_extension('cogs.reactions')
     await bot.load_extension('cogs.spam')
     await bot.load_extension('cogs.logging')
+    await bot.load_extension('cogs.test')
 
 @bot.event
 async def on_ready():
