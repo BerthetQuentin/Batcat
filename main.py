@@ -29,17 +29,19 @@ async def setup_extensions():
 @bot.event
 async def on_ready():
     print("\033[91m" + r"""
-
 __________    _________________________     ________________
 \______   \  /  _  \__    ___/\_   ___ \   /  _  \__    ___/
  |    |  _/ /  /_\  \|    |   /    \  \/  /  /_\  \|    |   
  |    |   \/    |    \    |   \     \____/    |    \    |   
  |______  /\____|__  /____|    \______  /\____|__  /____|   
         \/         \/                 \/         \/         
-
     """)
 
+    print("\033[91m" + r"""
+        Bot has started successfully!
+        """)
     print("\033[97m" + f'Logged in as {bot.user.name}')
+    print(f'Connected to {len(bot.guilds)} guild(s).')
 
 async def main():
     async with bot:
