@@ -15,3 +15,12 @@ async def remove_role(member, role_name):
         await member.remove_roles(role)
         return True
     return False
+
+# Function to check if member have role
+async def check_role(member):
+    roles = discord.utils.get(member.guild.roles)
+    if roles:
+        return roles
+    else:
+        return False
+
